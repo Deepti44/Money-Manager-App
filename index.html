@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Money Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <h1>💰 Money Manager</h1>
+    <button id="openFormBtn" onclick="app.openForm()">+ Add Transaction</button>
+  </nav>
+
+  <div class="summary-section">
+    <div class="summary-card green">
+      <p>Total Income</p>
+      <h2 id="totalIncome">₹0.00</h2>
+    </div>
+    <div class="summary-card red">
+      <p>Total Expenses</p>
+      <h2 id="totalExpense">₹0.00</h2>
+    </div>
+    <div class="summary-card blue">
+      <p>Net Balance</p>
+      <h2 id="netBalance">₹0.00</h2>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <select id="filterCategory" onchange="app.applyFilter()">
+      <option value="all">All Categories</option>
+      <option value="Income">Income</option>
+      <option value="Expense">Expense</option>
+    </select>
+
+    <select id="filterSubcategory" onchange="app.applyFilter()">
+      <option value="all">All Sub-categories</option>
+    </select>
+
+    <input type="date" id="filterFrom" onchange="app.applyFilter()">
+    <span>to</span>
+    <input type="date" id="filterTo" onchange="app.applyFilter()">
+
+    <select id="sortBy" onchange="app.applyFilter()">
+      <option value="dateDesc">Date: Newest First</option>
+      <option value="dateAsc">Date: Oldest First</option>
+      <option value="amtDesc">Amount: High to Low</option>
+      <option value="amtAsc">Amount: Low to High</option>
+    </select>
+
+    <button onclick="app.clearFilter()">Clear</button>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Sub-Category</th>
+          <th>Description</th>
+          <th>Amount</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="transactionBody">
+
+      </tbody>
+    </table>
+    <p id="emptyMsg" style="text-align:center; padding:20px; color:#999;">No transactions found.</p>
+  </div>
+
+  <div class="charts-section">
+    <div class="chart-box">
+      <h3>Expense by Category</h3>
+      <canvas id="pieChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>Income vs Expense</h3>
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin: 10px 0 40px;">
+    <button class="download-btn" onclick="app.downloadCSV()">⬇ Download CSV</button>
+  </div>
+
+
+  <div id="overlay" class="overlay" onclick="app.closeForm()"></div>
+
+  <div id="formPopup" class="form-popup">
+    <h2 id="formTitle">Add Transaction</h2>
+
+    <label>Amount *</label>
+    <input type="number" id="amount" placeholder="Enter amount">
+    <span class="error" id="amountErr"></span>
+
+    <label>Date *</label>
+    <input type="date" id="date">
+    <span class="error" id="dateErr"></span>
+
+    <label>Category *</label>
+    <div class="radio-group">
+      <label><input type="radio" name="category" value="Income" onchange="app.updateSubcategories()"> Income</label>
+      <label><input type="radio" name="category" value="Expense" onchange="app.updateSubcategories()"> Expense</label>
+    </div>
+    <span class="error" id="categoryErr"></span>
+
+    <label>Sub-Category *</label>
+    <select id="subcategory">
+      <option value="">-- Select --</option>
+    </select>
+    <span class="error" id="subcategoryErr"></span>
+
+    <label>Description (optional)</label>
+    <textarea id="description" placeholder="Max 100 characters" maxlength="100"></textarea>
+
+    <div class="form-buttons">
+      <button onclick="app.saveTransaction()">Save</button>
+      <button class="cancel-btn" onclick="app.closeForm()">Cancel</button>
+    </div>
+  </div>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
